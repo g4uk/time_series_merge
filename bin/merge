@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+require 'trollop'
+
+MERGE_DIR = File.join(File.dirname(__FILE__), '../').freeze
+ENV['RAILS_ENV'] ||= 'development'
+
+require File.join(MERGE_DIR, 'lib/time_series_merge')
+
+opts = Trollop::options do
+  version "Version " << TimeSeriesMerge::VERSION
+  banner <<-BANNER
+Time Series Merge (.txt files only)
+
+Usage:
+  #{__FILE__} [options]
+  where [options] are:
+  BANNER
+
+  opt :path,
+    "Path to source files directory",
+    type: :string,
+    short: '-p',
+    required: true
+
+  opt :dest,
+    "Destination file path",
+    short: '-d',
+    type: :string,
+    required: true
+end
+
+Trollop::die :path, "Source path must be a directory" unless File.directory?(opts[:path])
+Trollop::die :path, "Source path hasn't any files" if Dir.empty?(opts[:path])
+
+time_series_merge = TimeSeriesMerge::Runner.new(opts)
+time_series_merge.run
