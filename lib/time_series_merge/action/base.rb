@@ -12,7 +12,7 @@ module TimeSeriesMerge
       COL_X_VALUE_NAME = :x_value.freeze
 
       # this constant need to keep the file fields/values mutually placed
-      FILE_COLS = [COL_DATE_NAME, COL_X_VALUE_NAME]
+      FILE_COLS = [COL_DATE_NAME, COL_X_VALUE_NAME].freeze
 
       attr_writer :opts
 

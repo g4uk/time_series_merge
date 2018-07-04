@@ -6,11 +6,11 @@ module TimeSeriesMerge
     end
 
     def run
-      Pipe.new(@opts).
-        add(Action::Merge.new).
-        add(Action::Sort.new).
-        add(Action::Group.new).
-        run
+      pipe = Pipe.new(@opts)
+      pipe.add(Action::Merge.new)
+      pipe.add(Action::Sort.new)
+      pipe.add(Action::Group.new)
+      pipe.run
     end
   end
 end
