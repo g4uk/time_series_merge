@@ -40,10 +40,6 @@ module TimeSeriesMerge
         StructLine.new(*line.split( COLUMN_SEPARATOR ))
       end
 
-      def structed_line
-
-      end
-
       def destination
         @opts.destination
       end
