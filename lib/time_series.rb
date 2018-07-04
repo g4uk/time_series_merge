@@ -1,0 +1,12 @@
+require 'active_support/all'
+
+require 'time_series_merge/version'
+require 'time_series_merge/pipe'
+require 'time_series_merge/action/base'
+require 'time_series_merge/action/merge'
+require 'time_series_merge/action/sort'
+require 'time_series_merge/action/group'
+require 'time_series_merge/runner'
+require 'time_series_merge/path_utils'
+require 'time_series_merge/options'
+require 'time_series_merge/sources'

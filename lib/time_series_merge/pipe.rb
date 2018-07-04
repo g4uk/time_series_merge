@@ -1,18 +1,21 @@
 module TimeSeriesMerge
   class Pipe
-    def initialize(destination_file)
-      @destination_file = destination_file
+    def initialize(opts)
       @actions = []
+      @opts = opts
     end
 
     def add(action)
-      action.destination_file = @destination_file
+      action.opts = @opts
       @actions << action
       self
     end
 
-    def call
-      @actions.map { |action| action.call! }
+    def run
+      @actions.map do |action|
+        TimeSeriesMerge.logger.info("Starting #{action}")
+        action.run
+      end
     end
   end
 end

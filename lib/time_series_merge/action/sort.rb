@@ -1,7 +1,7 @@
 module TimeSeriesMerge
   module Action
     class Sort < Base
-      LINE_COUNT_PER_FILE = 10000.freeze
+      SORTED_FILE_EXTENSION = 'sorted'.freeze
 
       def initialize
         @files_to_sort = []
@@ -9,7 +9,7 @@ module TimeSeriesMerge
         @file_counter = 0
       end
 
-      def call!
+      def call
         make_splits
 
         while true
@@ -25,31 +25,32 @@ module TimeSeriesMerge
           sleep
         end
 
-        final_name = "#{destination_file}.sorted"
+        final_name = "#{destination}.#{SORTED_FILE_EXTENSION}"
 
         File.rename( @files_to_merge.first, final_name )
-        File.delete( destination_file )
-        File.rename( final_name, destination_file )
+        File.delete( destination )
+        File.rename( final_name, destination )
 
         nil
       end
 
       def next_filename
-        return "#{destination_file}.#{(@file_counter += 1)}"
+        return "#{destination}.#{(@file_counter += 1)}"
       end
 
       def make_splits
         line_counter = 0
-        infile = File.open( destination_file )
         output_filename = next_filename
-        outfile = File.open( output_filename, "w" )
+
+        infile = File.open( destination )
+        outfile = File.open( output_filename, File::WRONLY )
 
         while (line = infile.gets)
           if line_counter >= LINE_COUNT_PER_FILE
             outfile.close
             @files_to_sort << output_filename
             output_filename = next_filename
-            outfile = File.open( output_filename, "w" )
+            outfile = File.open( output_filename, File::WRONLY )
             line_counter = 0
           end
           outfile.print( line )
@@ -70,28 +71,10 @@ module TimeSeriesMerge
 
       def merge_splits(filename_a, filename_b, output_filename)
         merge!(filename_a, filename_b, output_filename)
+        @files_to_merge << output_filename
+
         File.delete( filename_a )
         File.delete( filename_b )
-        @files_to_merge << output_filename
-      end
-
-      def aggregate_file_data!(input_filename, sorted_filename)
-        lines = []
-        infile = File.open( input_filename )
-
-        while (line = infile.gets)
-          col_date = split_line( line )[:date]
-          col_x_value = split_line( line )[:x_value].to_i
-          lines << Hash[[:date, :x_value].zip [col_date, col_x_value]]
-        end
-
-        infile.close
-        lines = lines.each_with_object(Hash.new(0)) { |x, hash| hash[x[:date]] += x[:x_value] }
-
-        outfile = File.open( sorted_filename, "w" )
-        lines.each{ |line_item| outfile.puts line_item.join(COLUMN_SEPARATOR) }
-
-        outfile.close
       end
 
       def sort_file_data!(input_filename, sorted_filename)
@@ -99,21 +82,20 @@ module TimeSeriesMerge
         infile = File.open( input_filename )
 
         while (line = infile.gets)
-          col = split_line( line )[:date]
-          lines << Hash[[:sort_column_value, :line].zip [col, line]]
+          lines << Hash[[:sort_column_value, :line].zip [struct_line(line).date_as_timestamp, line]]
         end
 
         infile.close
-        lines.sort!{ |a, b| DateTime.parse( a[:sort_column_value] ).to_f <=> DateTime.parse( b[:sort_column_value] ).to_f }
+        lines.sort!{ |a, b| a[:sort_column_value] <=> b[:sort_column_value] }
 
-        outfile = File.open( sorted_filename, "w" )
+        outfile = File.open( sorted_filename, File::WRONLY )
         lines.each{ |line_item| outfile.print line_item[:line] }
 
         outfile.close
       end
 
       def merge!(filename_a, filename_b, output_filename)
-        outfile = File.open( output_filename, "w" )
+        outfile = File.open( output_filename, File::WRONLY )
 
         file_a = File.open( filename_a )
         file_b = File.open( filename_b )
@@ -153,9 +135,9 @@ module TimeSeriesMerge
         return [nil, nil] if line.nil?
         return [line, nil] unless parse_cols
 
-        cols = split_line( line.chomp )
+        cols = struct_line( line.chomp )
 
-        return [line, cols[:date]]
+        return [line, cols.public_send(COL_DATE_NAME)]
       end
     end
   end

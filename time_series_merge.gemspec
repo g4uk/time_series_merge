@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ["gnat.dev@gmail.com"]
   s.homepage    = "https://www.linkedin.com/in/gnatyuk/"
   s.summary     = "Time Series Merge"
-  s.description = ""
+  s.description = "Some experimental project"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
@@ -19,5 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 5.1.4"
   s.add_dependency "trollop", "~> 2.1", ">= 2.1.2"
 
-  s.add_development_dependency "rspec", "~> 3.1.0"
+  s.add_development_dependency "rspec-core", "~> 3.7.1"
+  s.add_development_dependency "rspec-rails", "~> 3.7.2"
+  s.add_development_dependency "rspec-support", "~> 3.7.1"
 end
