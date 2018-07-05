@@ -5,7 +5,7 @@ module TimeSeriesMerge
     attr_writer :source, :destination, :file_extension
 
     def initialize(opts)
-      opts.map {|name, value| self.public_send("#{name}=", value) }
+      opts.map { |name, value| public_send("#{name}=", value) }
     end
 
     # path to source files folder
