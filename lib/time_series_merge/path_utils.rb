@@ -1,5 +1,7 @@
 module TimeSeriesMerge
   module PathUtils
+    class PathUtilsNotImplementedError < RuntimeError; end
+
     SPLIT_PATTERN = '/'.freeze
 
     def normalize(path)
@@ -11,7 +13,7 @@ module TimeSeriesMerge
     end
 
     def extension
-      raise NotImplementedError.new("::extension")
+      raise PathUtilsNotImplementedError.new("::extension")
     end
   end
 end
