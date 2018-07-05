@@ -2,8 +2,6 @@ module TimeSeriesMerge
   class Options
     include PathUtils
 
-    DEFAULT_FILE_EXTENSION = 'txt'.freeze
-
     attr_writer :source, :destination, :file_extension
 
     def initialize(opts)
@@ -28,7 +26,7 @@ module TimeSeriesMerge
     private
 
     def extension
-      @file_extension || DEFAULT_FILE_EXTENSION
+      @file_extension
     end
   end
 end
