@@ -1,7 +1,7 @@
 module TimeSeriesMerge
   module Action
     class Group < Base
-      GROUPED_FILE_EXTENSION = 'grouped'
+      GROUPED_FILE_EXTENSION = 'grouped'.freeze
 
       def initialize
         @to_insert_value = Hash[FILE_COLS.zip [nil, 0]]
