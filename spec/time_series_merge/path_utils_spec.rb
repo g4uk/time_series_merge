@@ -22,6 +22,10 @@ describe TimeSeriesMerge::PathUtils do
     expect { subject.full_path("#{path}/") }.to raise_error(TimeSeriesMerge::PathUtils::PathUtilsNotImplementedError)
   end
 
+  it 'extension raise error' do
+    expect{ subject.extension }.to raise_error(TimeSeriesMerge::PathUtils::PathUtilsNotImplementedError)
+  end
+
   it 'full_path should return mask to get .csv files' do
     subject.instance_eval do
       def extension

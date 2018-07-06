@@ -19,7 +19,7 @@ module TimeSeriesMerge
       attr_writer :opts
 
       def call
-        raise ActionNotImplementedError.new("::call")
+        raise ActionNotImplementedError, 'Call should be implemented'
       end
 
       protected
