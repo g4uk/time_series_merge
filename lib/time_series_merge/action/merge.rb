@@ -15,7 +15,7 @@ module TimeSeriesMerge
       private
 
       def files
-        TimeSeriesMerge::Sources.new(source_files).list
+        TimeSeriesMerge::Source.new(source_files).list
       end
     end
   end

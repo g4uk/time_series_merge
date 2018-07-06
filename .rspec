@@ -1,2 +1,5 @@
 --color
+-I lib
+--require time_series_merge
 --require spec_helper
+--require logger

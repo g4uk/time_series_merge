@@ -14,7 +14,7 @@ module TimeSeriesMerge
     end
 
     def extension
-      raise PathUtilsNotImplementedError.new("::extension")
+      raise PathUtilsNotImplementedError, 'Extension should be implemented'
     end
   end
 end

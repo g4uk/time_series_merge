@@ -130,6 +130,7 @@ PLATFORMS
 
 DEPENDENCIES
   rspec-core (~> 3.7.1)
+  rspec-mocks (~> 3.7.0)
   rspec-rails (~> 3.7.2)
   rspec-support (~> 3.7.1)
   time_series_merge!

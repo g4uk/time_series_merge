@@ -10,7 +10,7 @@ module TimeSeriesMerge
       def self.logger
         @logger
       end
-      @logger = Logger.new(STDOUT)
+      @logger = ::Logger.new(STDOUT)
     end
 
     def load_tasks

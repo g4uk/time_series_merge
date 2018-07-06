@@ -1,5 +1,5 @@
 module TimeSeriesMerge
-  class Sources
+  class Source
     MAX_FILES_COUNT_TO_READ = 100
 
     def initialize(sources)
