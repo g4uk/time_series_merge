@@ -10,7 +10,7 @@ describe TimeSeriesMerge::Source do
   end
 
   it 'should return a list of files within the specified directory' do
-    allow(Dir).to receive(:glob).and_return(file_list)
+    allow(Dir).to receive(:glob).with(path).and_return(file_list)
     expect(subject.list).to eq(file_list)
   end
 end

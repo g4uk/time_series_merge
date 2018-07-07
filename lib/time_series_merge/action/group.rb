@@ -8,7 +8,7 @@ module TimeSeriesMerge
       end
 
       # this group method is working correctly only after sorting!
-      def call
+      def run
         grouped_file_name = "#{destination}.#{GROUPED_FILE_EXTENSION}"
         grouped_file = File.open(grouped_file_name, File::APPEND)
 

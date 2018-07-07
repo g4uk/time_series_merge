@@ -9,7 +9,7 @@ module TimeSeriesMerge
         @file_counter = 0
       end
 
-      def call
+      def run
         make_splits
 
         while true

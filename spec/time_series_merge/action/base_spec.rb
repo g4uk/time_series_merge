@@ -25,8 +25,8 @@ describe TimeSeriesMerge::Action::Base do
     context 'exclusive methods' do
       let(:date_to_timestamp) { DateTime.parse(line.split(subject.class::COLUMN_SEPARATOR).first).to_f }
       let(:date) { line.split(subject.class::COLUMN_SEPARATOR).first }
-      let(:x_value_to_int) { line.split(subject.class::COLUMN_SEPARATOR).second }
-      let(:hash) { { subject.class::COL_DATE_NAME => date, subject.class::COL_X_VALUE_NAME => x_value_to_int } }
+      let(:x_value) { line.split(subject.class::COLUMN_SEPARATOR).second }
+      let(:hash) { { subject.class::COL_DATE_NAME => date, subject.class::COL_X_VALUE_NAME => x_value } }
 
       it 'date_to_timestamp is respond to' do
         expect(subject.send(:struct_line, line)).to respond_to(:date_to_timestamp)
@@ -41,7 +41,7 @@ describe TimeSeriesMerge::Action::Base do
       end
 
       it 'x_value_to_int return float timestamp' do
-        expect(subject.send(:struct_line, line).x_value_to_int).to eq(x_value_to_int.to_i)
+        expect(subject.send(:struct_line, line).x_value_to_int).to eq(x_value.to_i)
       end
 
       it 'to_hash is respond to' do
@@ -69,8 +69,8 @@ describe TimeSeriesMerge::Action::Base do
       end
     end
 
-    it 'call raise exception' do
-      expect{ subject.call }.to raise_error(TimeSeriesMerge::Action::Base::ActionNotImplementedError)
+    it 'run raise exception' do
+      expect { subject.run }.to raise_error(TimeSeriesMerge::Action::Base::ActionNotImplementedError)
     end
   end
 end
