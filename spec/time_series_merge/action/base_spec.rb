@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe TimeSeriesMerge::Action::Base do
+  include_context 'shared context'
+
   context 'constants' do
     let(:constants) do
       [subject.class::COLUMN_SEPARATOR, subject.class::TRUNCATE_SIZE, subject.class::INPUT_FILES_ENCODING,
@@ -54,7 +56,6 @@ describe TimeSeriesMerge::Action::Base do
     end
 
     context 'opts' do
-      let(:opts) { Struct.new(:destination, :sources) }
       let(:destination_value) { 'destination' }
       let(:sources_value) { 'sources' }
 

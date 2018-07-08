@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe TimeSeriesMerge::Action::Group do
+  include_context 'shared context'
+
   let(:line_date) { '2018-07-06' }
   let(:line_count) { 12 }
   let(:line2_date) { '2018-07-03' }
@@ -28,11 +30,8 @@ describe TimeSeriesMerge::Action::Group do
   end
 
   context 'run' do
-    include_context 'shared context'
-
     let(:input_file_name) { 'input_file_name' }
     let(:grouped_file_name) { "#{input_file_name}.grouped" }
-    let(:opts) { Struct.new(:destination, :sources) }
 
     let(:grouped_file) { file.new([]) }
     let(:iteration_count_for_line) { 10 }

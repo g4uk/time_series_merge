@@ -3,21 +3,8 @@ require 'spec_helper'
 describe TimeSeriesMerge::Action::Merge do
   include_context 'shared context'
 
-  let(:line1_date) { '2018-07-06' }
-  let(:line1_count) { 12 }
-  let(:line2_date) { '2018-07-03' }
-  let(:line2_count) { 1 }
-
-  let(:file1) { 'file1' }
-  let(:file2) { 'file2' }
-
-  let(:line1) { "#{line1_date}:#{line1_count}" }
-  let(:line2) { "#{line2_date}:#{line2_count}" }
-  let(:file_lines) { { file1 => line1, file2 => line2 } }
-  let(:file_list) { [file1, file2] }
   let(:sources) { '/' }
   let(:destination_file_name) { 'destination_file_name' }
-  let(:opts) { Struct.new(:destination, :sources) }
 
   before(:each) do
     allow(Dir).to receive(:glob).with(sources).and_return(file_list)
@@ -29,12 +16,6 @@ describe TimeSeriesMerge::Action::Merge do
   end
 
   context 'run' do
-    def input_file(name)
-      f = file.new([])
-      f.puts(file_lines[name])
-      f
-    end
-
     let(:destination) { file.new([]) }
     let(:mode) { "#{File::RDONLY}:#{subject.class::INPUT_FILES_ENCODING}" }
 

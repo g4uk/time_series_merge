@@ -10,7 +10,7 @@ module TimeSeriesMerge
       end
 
       def run
-        make_splits
+        make_split
 
         while true
           break if @files_to_sort.empty? && @files_to_merge.size == 1
@@ -19,10 +19,9 @@ module TimeSeriesMerge
             next
           end
           unless @files_to_merge.size < 2
-            merge_splits(@files_to_merge.shift, @files_to_merge.shift, next_filename)
+            merge_split(@files_to_merge.shift, @files_to_merge.shift, next_filename)
             next
           end
-          sleep
         end
 
         final_name = "#{destination}.#{SORTED_FILE_EXTENSION}"
@@ -38,11 +37,11 @@ module TimeSeriesMerge
         return "#{destination}.#{(@file_counter += 1)}"
       end
 
-      def make_splits
+      def make_split
         line_counter = 0
         output_filename = next_filename
 
-        infile = File.open( destination )
+        infile = File.open(destination)
         outfile = File.open(output_filename, File::WRONLY)
 
         while (line = infile.gets)
@@ -53,7 +52,7 @@ module TimeSeriesMerge
             outfile = File.open(output_filename, File::WRONLY)
             line_counter = 0
           end
-          outfile.print( line )
+          outfile.print(line)
           line_counter += 1
         end
 
@@ -63,38 +62,28 @@ module TimeSeriesMerge
         @files_to_sort << output_filename
       end
 
-      def sort_split(filename)
+      def sort_split(input_filename)
         sorted_filename = next_filename
-        sort_file_data!(filename, sorted_filename)
-        @files_to_merge << sorted_filename
-      end
 
-      def merge_splits(filename_a, filename_b, output_filename)
-        merge!(filename_a, filename_b, output_filename)
-        @files_to_merge << output_filename
-
-        File.delete(filename_a)
-        File.delete(filename_b)
-      end
-
-      def sort_file_data!(input_filename, sorted_filename)
         lines = []
-        infile = File.open( input_filename )
+        infile = File.open(input_filename)
 
         while (line = infile.gets)
           lines << Hash[[:sort_column_value, :line].zip [struct_line(line).date_to_timestamp, line]]
         end
 
         infile.close
-        lines.sort!{ |a, b| a[:sort_column_value] <=> b[:sort_column_value] }
+        lines.sort! { |a, b| a[:sort_column_value] <=> b[:sort_column_value] }
 
         outfile = File.open(sorted_filename, File::WRONLY)
         lines.each{ |line_item| outfile.print line_item[:line] }
 
         outfile.close
+
+        @files_to_merge << sorted_filename
       end
 
-      def merge!(filename_a, filename_b, output_filename)
+      def merge_split(filename_a, filename_b, output_filename)
         outfile = File.open(output_filename, File::WRONLY)
 
         file_a = File.open(filename_a)
@@ -127,6 +116,11 @@ module TimeSeriesMerge
         file_b.close
 
         outfile.close
+
+        @files_to_merge << output_filename
+
+        File.delete(filename_a)
+        File.delete(filename_b)
       end
 
       def get_line(stream, parse_cols = true)
